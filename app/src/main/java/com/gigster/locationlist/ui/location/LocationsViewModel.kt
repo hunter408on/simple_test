@@ -66,7 +66,13 @@ class LocationsViewModel : ViewModel() {
 
         //sort the hashmap keys
         val sortedKeys = hashMap.keys.sorted()
-
+        val keySums = mutableListOf<Int>()
+        var totalCount = 0
+        keySums.add(totalCount)
+        for (key in sortedKeys) {
+            totalCount += hashMap[key]!!
+            keySums.add(totalCount)
+        }
         //create output by iterating input and hashmap
         val output: MutableList<Entry?> = MutableList(input.size) { null }
         for (element in input) {
@@ -75,11 +81,7 @@ class LocationsViewModel : ViewModel() {
                 //find the index of the distance in keys
                 val indexOfDistance = sortedKeys.indexOfFirst { it == distance }
                 if (indexOfDistance > -1) {
-                    var totalCountUpto = 0 //calculate upto the distance
-                    for (i in 0 until indexOfDistance) {
-                        val key = sortedKeys[i]
-                        totalCountUpto += hashMap[key]!!
-                    }
+                    var totalCountUpto = keySums[indexOfDistance]
                     loop@for (i in totalCountUpto until totalCountUpto + sortedKeys[indexOfDistance]) {
                         if (output[i] == null) {
                             output[i] = element
